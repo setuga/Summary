@@ -90,9 +90,9 @@ public class GrayScale
         }
     }
 
-    public static void outPutImage(String fileName, BufferedImage bufferedImage) throws IOException
+    public static void outPutImage(String filePath, BufferedImage bufferedImage) throws IOException
     {
-        ImageIO.write(bufferedImage, fileName.substring(fileName.lastIndexOf(".") + 1), new File(fileName));
+        ImageIO.write(bufferedImage, filePath.substring(filePath.lastIndexOf(".") + 1), new File(filePath));
     }
 
     private static int median(int r, int g, int b)
