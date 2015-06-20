@@ -11,13 +11,13 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
 
 public class Zip
 {
 
-    public static void compressFiles(String zipPath, ArrayList<String> files)
+    public static void compressFiles(String zipPath, List<String> files)
     {
         File zipFile = new File(zipPath);
         ZipOutputStream zipOutputStream = null;
