@@ -91,6 +91,14 @@ public class GrayScale
         }
     }
 
+    public static BufferedImage readImage(File file) throws IOException
+    {
+        try (FileInputStream inputStream = new FileInputStream(file))
+        {
+            return ImageIO.read(inputStream);
+        }
+    }
+
     public static void outPutImage(String filePath, BufferedImage bufferedImage) throws IOException
     {
         ImageIO.write(bufferedImage, filePath.substring(filePath.lastIndexOf(".") + 1), new File(filePath));
