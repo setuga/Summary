@@ -11,13 +11,16 @@ import java.io.IOException;
 public class GrayScale
 {
 
-    public static final int MIDDLE = 0;
-    public static final int NTSC = 1;
-    public static final int ITU = 2;
-    public static final int SIMPLE = 3;
-    public static final int MEDIAN = 4;
+    public enum TYPE
+    {
+        MIDDLE,
+        NTSC,
+        ITU,
+        SIMPLE,
+        MEDIAN
+    }
 
-    public static BufferedImage toGray(BufferedImage bufferedImage, int type)
+    public static BufferedImage toGray(BufferedImage bufferedImage, TYPE type)
     {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -29,43 +32,41 @@ public class GrayScale
                 int rgb = bufferedImage.getRGB(x, y);
                 Color color = new Color(rgb);
                 int gray = 0;
-                if (type == MIDDLE)
+                switch (type)
                 {
-                    int [] rgbArray = {color.getRed(), color.getGreen(), color.getBlue()};
-                    int max = rgbArray[0], min = rgbArray[0];
-                    for (int c : rgbArray)
-                    {
-                        if (max < c)
+                    case MIDDLE:
+                        int [] rgbArray = {color.getRed(), color.getGreen(), color.getBlue()};
+                        int max = rgbArray[0], min = rgbArray[0];
+                        for (int c : rgbArray)
                         {
-                            max = c;
+                            if (max < c)
+                            {
+                                max = c;
+                            }
+                            if (min > c)
+                            {
+                                min = c;
+                            }
                         }
-                        if (min > c)
-                        {
-                            min = c;
-                        }
-                    }
-                    gray = (max + min) / 2;
-                }
-                if (type == NTSC)
-                {
-                    gray = (int) (color.getRed() * 0.298912 + color.getGreen() * 0.586611 + color.getBlue() * 0.114478);
-                }
-                if (type == ITU)
-                {
-                    double dX = 2.2;
-                    double doubleRed = Math.pow(color.getRed(), dX) * 0.222015;
-                    double doubleGreen = Math.pow(color.getGreen(), dX) * 0.706655;
-                    double doubleBlue = Math.pow(color.getBlue(), dX) * 0.071330;
-                    double doubleGray = Math.pow((doubleRed + doubleGreen + doubleBlue), (1 / dX));
-                    gray = (int) doubleGray;
-                }
-                if (type == SIMPLE)
-                {
-                    gray = (color.getRed() + color.getGreen() + color.getBlue()) / 3;
-                }
-                if (type == MEDIAN)
-                {
-                    gray = median(color.getRed(), color.getGreen(), color.getBlue());
+                        gray = (max + min) / 2;
+                        break;
+                    case NTSC:
+                        gray = (int) (color.getRed() * 0.298912 + color.getGreen() * 0.586611 + color.getBlue() * 0.114478);
+                        break;
+                    case ITU:
+                        double dX = 2.2;
+                        double doubleRed = Math.pow(color.getRed(), dX) * 0.222015;
+                        double doubleGreen = Math.pow(color.getGreen(), dX) * 0.706655;
+                        double doubleBlue = Math.pow(color.getBlue(), dX) * 0.071330;
+                        double doubleGray = Math.pow((doubleRed + doubleGreen + doubleBlue), (1 / dX));
+                        gray = (int) doubleGray;
+                        break;
+                    case SIMPLE:
+                        gray = (color.getRed() + color.getGreen() + color.getBlue()) / 3;
+                        break;
+                    case MEDIAN:
+                        gray = median(color.getRed(), color.getGreen(), color.getBlue());
+                        break;
                 }
                 coordinates[x][y] = gray;
             }
