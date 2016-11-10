@@ -1,4 +1,4 @@
-package com.github.setuga.summary.image;
+package com.setuga.summary.image;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;
@@ -24,7 +24,7 @@ public class Image
     {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-        int coordinates[][]  = new int[width][height];
+        int [][] coordinates = new int[width][height];
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
@@ -51,14 +51,14 @@ public class Image
     {
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
-        int coordinates[][]  = new int[width][height];
+        int [][] coordinates  = new int[width][height];
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 int rgb = bufferedImage.getRGB(x, y);
                 Color color = new Color(rgb);
-                int gray = 0;
+                int gray;
                 switch (type)
                 {
                     case MIDDLE:
@@ -85,7 +85,7 @@ public class Image
                         double doubleRed = Math.pow(color.getRed(), dX) * 0.222015;
                         double doubleGreen = Math.pow(color.getGreen(), dX) * 0.706655;
                         double doubleBlue = Math.pow(color.getBlue(), dX) * 0.071330;
-                        double doubleGray = Math.pow((doubleRed + doubleGreen + doubleBlue), (1 / dX));
+                        double doubleGray = Math.pow(doubleRed + doubleGreen + doubleBlue, 1 / dX);
                         gray = (int) doubleGray;
                         break;
                     case SIMPLE:
@@ -94,6 +94,8 @@ public class Image
                     case MEDIAN:
                         gray = median(color.getRed(), color.getGreen(), color.getBlue());
                         break;
+                    default:
+                        return bufferedImage;
                 }
                 coordinates[x][y] = gray;
             }
@@ -128,7 +130,7 @@ public class Image
 
     public static void outPutImage(String filePath, BufferedImage bufferedImage) throws IOException
     {
-        ImageIO.write(bufferedImage, filePath.substring(filePath.lastIndexOf(".") + 1), new File(filePath));
+        ImageIO.write(bufferedImage, filePath.substring(filePath.lastIndexOf('.') + 1), new File(filePath));
     }
 
     private static int median(int r, int g, int b)
