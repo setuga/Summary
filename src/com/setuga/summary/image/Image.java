@@ -1,7 +1,7 @@
 package com.setuga.summary.image;
 
 import javax.imageio.ImageIO;
-import java.awt.Color;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBuffer;
 import java.io.File;
@@ -18,6 +18,26 @@ public class Image
         ITU,
         SIMPLE,
         MEDIAN
+    }
+
+    public static BufferedImage link(BufferedImage... bufferedImages)
+    {
+        if (bufferedImages.length == 0) return null;
+        int width = 0, height = 0;
+        for (BufferedImage bufferedImage : bufferedImages)
+        {
+            height = height + bufferedImage.getHeight();
+            if (width < bufferedImage.getWidth()) width = bufferedImage.getWidth();
+        }
+        BufferedImage out = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics2D = (Graphics2D) out.getGraphics();
+        height = 0;
+        for (BufferedImage bufferedImage : bufferedImages)
+        {
+            graphics2D.drawImage(bufferedImage, 0, height, null);
+            height = height + bufferedImage.getHeight();
+        }
+        return out;
     }
 
     public static BufferedImage reverseColor(BufferedImage bufferedImage)
@@ -112,7 +132,17 @@ public class Image
         return out;
     }
 
-    public static BufferedImage readImage(String filePath) throws IOException
+    public static BufferedImage[] read(String... filePaths) throws IOException
+    {
+        BufferedImage[] bufferedImages = new BufferedImage[filePaths.length];
+        for (int i = 0; i < filePaths.length; i++)
+        {
+            bufferedImages[i] = read(filePaths[i]);
+        }
+        return bufferedImages;
+    }
+
+    public static BufferedImage read(String filePath) throws IOException
     {
         try (FileInputStream inputStream = new FileInputStream(filePath))
         {
@@ -120,15 +150,7 @@ public class Image
         }
     }
 
-    public static BufferedImage readImage(File file) throws IOException
-    {
-        try (FileInputStream inputStream = new FileInputStream(file))
-        {
-            return ImageIO.read(inputStream);
-        }
-    }
-
-    public static void outPutImage(String filePath, BufferedImage bufferedImage) throws IOException
+    public static void outPut(String filePath, BufferedImage bufferedImage) throws IOException
     {
         ImageIO.write(bufferedImage, filePath.substring(filePath.lastIndexOf('.') + 1), new File(filePath));
     }
