@@ -2,7 +2,7 @@
 out
 
 Summary.iml
-src/com/setuga/summary/Main.java
 
 *.jpg
 *.png
+*.tif
